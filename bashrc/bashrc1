@@ -1,0 +1,44 @@
+# colors
+cinza="$(tput bold ; tput setaf 0)"
+branco="$(tput bold ; tput setaf 7)"
+azul="$(tput bold; tput setaf 4)"
+ciano="$(tput bold; tput setaf 6)"
+vermelho="$(tput bold; tput setaf 1)"
+nc="$(tput sgr0)"
+
+# exports
+export PATH="${HOME}/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:"
+export PATH="${PATH}/usr/local/sbin:/opt/bin:/usr/bin/core_perl:/usr/games/bin:"
+export PATH="${PATH}/home/sigma/.emacs.d/bin:/home/sigma/.cargo/bin"
+
+if [[ $EUID -eq 0 ]]; then
+  export PS1="\[$azul\][ \[$vermelho\]\H \[$branco\]\w\[$cinza\] \[$azul\]]\\[$branco\]# \[$nc\]"
+else
+  export PS1="\[$azul\][ \[$ciano\]\H \[$branco\]\w\[$cinza\] \[$azul\]]\\[$branco\]\$ \[$nc\]"
+fi
+
+export LD_PRELOAD=""
+export EDITOR="nvim"
+#export CC=/usr/bin/clang
+#export CXX=/usr/bin/clang++
+# alias
+alias record="wf-recorder -g 0,0 1920x1080 --audio=alsa_output.pci-0000_00_1f.3.analog-stereo.monitor"
+# can be alsa_input.pci-0000_00_1f.3.analog-stereo (input)
+alias pacman="pacman --color=auto"
+alias cat="bat -p"
+alias l="ls --color=auto"
+alias ls="ls --color"
+alias vi="vim"
+alias shred="shred -zf"
+alias python="python3"
+alias wget="wget -U 'noleak'"
+alias curl="curl --user-agent 'noleak'"
+
+# source files
+[ -r /usr/share/bash-completion/completions ] &&
+  . /usr/share/bash-completion/completions/*
+
+
+tocar() {
+	  mpv --input-ipc-server=/tmp/mpv-ipc --ytdl-format=bestaudio ytdl://ytsearch:"$@"
+}

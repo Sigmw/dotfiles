@@ -1,0 +1,308 @@
+# Logo key. Use Mod1 for Alt.
+
+input "2321:21128:SYNA3602:00_0911:5288_Touchpad" {
+    dwt enabled
+    click_method clickfinger
+    tap enabled
+    natural_scroll enabled
+
+}
+
+# Keyboard setup
+input * {
+    xkb_layout "br"
+    xkb_variant "colemak,,typewriter"
+    xkb_options "grp:win_space_toggle"
+}
+set $mod Mod4
+
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+
+# Your preferred terminal emulator
+set $term alacritty
+
+# Your preferred web browser 
+set $browser firefox
+
+# Your preferred application launcher
+
+### Output configuration
+
+# wallpaper 
+#output * bg /home/fill
+output * bg /home/sigma/Imagens/Papeis-de-Parede-e-Icones/windows.jpeg fill
+#output * bg /home/demus/Wallpaper/002.png fill
+
+#lock screen
+bindsym Ctrl+Alt+l exec swaylock --screenshots --clock --indicator-idle-visible \
+	--indicator-radius 100 \
+	--indicator-thickness 7 \
+	--ignore-empty-password \
+	--ring-color 2a2e38 \
+	--key-hl-color 51afef \
+	--text-color bbc2cf \
+	--line-color 2a2e38 \
+	--inside-color 242730 \
+	--separator-color 00000000 \
+	--fade-in 0.1 \
+	--effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+	--effect-vignette 0.5:0.5 \
+for_window [app_id="firefox"] inhibit_idle fullscreen
+exec swayidle -w \
+	timeout 300 'swaylock --screenshots --clock --indicator-idle-visible \
+        --indicator-radius 100 \
+        --indicator-thickness 7 \
+        --ignore-empty-password \
+        --ring-color 2a2e38 \
+        --key-hl-color 51afef \
+        --text-color bbc2cf \
+        --line-color 2a2e38 \
+        --inside-color 242730 \
+        --separator-color 00000000 \
+        --fade-in 0.1 \
+        --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+        --effect-vignette 0.5:0.5 \' \
+	timeout 600 'swaymsg "output * dpms off"' \
+		resume 'swaymsg "output * dpms on"' \
+		before-sleep 'swaylock --screenshots --clock --indicator-idle-visible \
+        --indicator-radius 100 \
+        --indicator-thickness 7 \
+        --ignore-empty-password \
+        --ring-color 2a2e38 \
+        --key-hl-color 51afef \
+        --text-color bbc2cf \
+        --line-color 2a2e38 \
+        --inside-color 242730 \
+        --separator-color 00000000 \
+        --fade-in 0.1 \
+        --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+        --effect-vignette 0.5:0.5 \'
+
+bindswitch --reload --locked lid:off exec swaymsg "output * dpms on" && swaylock --screenshots --clock --indicator-idle-visible \
+        --indicator-radius 100 \
+        --indicator-thickness 7 \
+        --ignore-empty-password \
+        --ring-color 2a2e38 \
+        --key-hl-color 51afef \
+        --text-color bbc2cf \
+        --line-color 2a2e38 \
+        --inside-color 242730 \
+        --separator-color 00000000 \
+        --fade-in 0.1 \
+        --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+        --effect-vignette 0.5:0.5 \
+
+bindswitch --reload --locked lid:on exec swaymsg "output * dpms off"
+
+# Touchpad (tap to enable configured)
+input 2321:21128:SYNA3602:00_0911:5288_Touchpad tap enabled
+   
+### Key bindings
+    # Start a terminal
+    bindsym $mod+Return exec $term
+
+    # Kill focused window
+    bindsym $mod+Shift+q kill
+
+    # Start your launcher
+    bindsym $mod+d exec wofi --show drun -I
+    # Drag floating windows by holding down $mod and left mouse button.
+    # Resize them with right mouse button + $mod.
+    # Despite the name, also works for non-floating windows.
+    # Change normal to inverse to use left mouse button for resizing and right
+    # mouse button for dragging.
+    floating_modifier $mod normal
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+# Brightness controls
+ bindsym XF86MonBrightnessUp exec brightnessctl -q set +5% # increase screen brightness
+ bindsym XF86MonBrightnessDown exec brightnessctl -q set 5%- # decrease screen brightnes
+
+# Pulse Audio controls
+ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Power Off
+ bindsym XF86PowerOff exec swaynag -t warning -m '襤 Power Menu Options' -b ' 﫼 Logout ' 'swaymsg exit' -z '  Suspend ' 'loginctl suspend' -b '  Restart ' 'loginctl reboot' -b ' 襤 Shutdown '  'loginctl poweroff'
+
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+#
+    # Switch to workspace
+    bindsym $mod+1 workspace number 1
+    bindsym $mod+2 workspace number 2
+    bindsym $mod+3 workspace number 3
+    bindsym $mod+4 workspace number 4
+    bindsym $mod+5 workspace number 5
+    bindsym $mod+6 workspace number 6
+    bindsym $mod+7 workspace number 7
+    bindsym $mod+8 workspace number 8
+    bindsym $mod+9 workspace number 9
+    bindsym $mod+0 workspace number 10
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
+    bindsym $mod+Shift+7 move container to workspace number 7
+    bindsym $mod+Shift+8 move container to workspace number 8
+    bindsym $mod+Shift+9 move container to workspace number 9
+    bindsym $mod+Shift+0 move container to workspace number 10
+    # Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+    workspace_auto_back_and_forth yes
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
+
+    # Move focus to the parent container
+    bindsym $mod+a focus parent
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+mode "resize" {
+   # These bindings trigger as soon as you enter the resize mode
+
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym $left       resize shrink width 12 px or 12 ppt
+    bindsym $down       resize grow height 12 px or 12 ppt
+    bindsym $up         resize shrink height 12 px or 12 ppt
+    bindsym $right      resize grow width 12 px or 12 ppt
+
+    # same bindings, but for the arrow keys
+    bindsym Left        resize shrink width 12 px or 12 ppt
+    bindsym Down        resize grow height 12 px or 12 ppt
+    bindsym Up          resize shrink height 12 px or 12 ppt
+    bindsym Right       resize grow width 12 px or 12 ppt
+
+    bindsym $mod+$left       resize shrink width 01 px or 01 ppt
+    bindsym $mod+$down       resize grow height 01 px or 01 ppt
+    bindsym $mod+$up         resize shrink height 01 px or 01 ppt
+    bindsym $mod+$right      resize grow width 01 px or 01 ppt
+
+    bindsym $mod+Left        resize shrink width 01 px or 01 ppt
+    bindsym $mod+Down        resize grow height 01 px or 01 ppt
+    bindsym $mod+Up          resize shrink height 01 px or 01 ppt
+    bindsym $mod+Right       resize grow width 01 px or 01 ppt
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+bar {
+    #position top
+swaybar_command waybar
+ #   status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
+
+}
+
+#No titlebars
+client.focused #6298e0 #467ecb #1d1f21 #707880
+client.focused_inactive #6298e0 #0d3264 #8abeb7
+client.unfocused #6298e0 #0d3264 #8abeb7
+client.urgent #1d1f21 #cc6666 #1d1f21
+client.placeholder #707880 #707880 #8abeb7
+default_border pixel 3
+
+#gaps
+gaps inner 10
+gaps outer 0 
+smart_gaps on
+
+ # take a screenshot (selection)
+
+   bindsym Shift+Print exec grim -g "$(slurp)" ~/Imagens/$(date +%Y-%m-%d_%H-%m-%s).png
+
+ # take a screenshot (entire)
+    bindsym Print exec grim -t png ~/Imagens/$(date +%Y-%m-%d_%H-%m-%s).png
+ 
+ # take a screenshot to clipboard (selection)
+    bindsym Control+Shift+Print exec grim -g "$(slurp -d)" - | wl-copy
+
+# take a screenshot to clipboard (entire)
+    bindsym Control+Print exec grim - | wl-copy
+
+
+# use xwayland 
+xwayland enable
+
+exec --no-startup-id pipewire &
+exec --no-startup-id wireplumber &
+exec --no-startup-id pipewire-pulse &
+exec --no-startup-id mako &
+include /etc/sway/config.d/*

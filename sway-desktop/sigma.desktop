@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Sigma
+Comment=Wayland I3wm Compositor.
+Exec=/usr/bin/start-sway
+Type=Application
