@@ -1,6 +1,5 @@
-#i3 config file (v4)
-# Please see https://i3wm.org/docs/userguide.html for a complete reference!
-#
+# Logo key. Use Mod1 for Alt.
+
 input "2321:21128:SYNA3602:00_0911:5288_Touchpad" {
     dwt enabled
     click_method clickfinger
@@ -8,254 +7,227 @@ input "2321:21128:SYNA3602:00_0911:5288_Touchpad" {
     natural_scroll enabled
 
 }
+
+# Keyboard setup
 input * {
     xkb_layout "br"
     xkb_variant "colemak,,typewriter"
     xkb_options "grp:win_space_toggle"
-} 
+}
+set $mod Mod4
 
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
 
-set $opacity 2
-for_window [class=".*"] opacity $opacity
-for_window [app_id=".*"] opacity $opacity
-output "*" bg /home/sigma/Imagens/Papeis-de-Parede-e-Icones/landscape.jpg fill
-# This config file uses keycodes (bindsym) and was written for the QWERTY
-# layout.
+# Your preferred terminal emulator
+set $term alacritty
+
+# Your preferred web browser 
+set $browser firefox
+
+# Your preferred application launcher
+
+### Output configuration
+
+# wallpaper 
+#output * bg /home/fill
+output * bg /home/sigma/Imagens/Papeis-de-Parede-e-Icones/void.png fill
+#output * bg /home/demus/Wallpaper/002.png fill
+
+#lock screen
+bindsym Ctrl+Alt+l exec swaylock --screenshots --clock --indicator-idle-visible \
+	--indicator-radius 100 \
+	--indicator-thickness 7 \
+	--ignore-empty-password \
+	--ring-color 2a2e38 \
+	--key-hl-color 51afef \
+	--text-color bbc2cf \
+	--line-color 2a2e38 \
+	--inside-color 242730 \
+	--separator-color 00000000 \
+	--fade-in 0.1 \
+	--effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+	--effect-vignette 0.5:0.5 \
+for_window [app_id="firefox"] inhibit_idle fullscreen
+exec swayidle -w \
+	timeout 300 'swaylock --screenshots --clock --indicator-idle-visible \
+        --indicator-radius 100 \
+        --indicator-thickness 7 \
+        --ignore-empty-password \
+        --ring-color 2a2e38 \
+        --key-hl-color 51afef \
+        --text-color bbc2cf \
+        --line-color 2a2e38 \
+        --inside-color 242730 \
+        --separator-color 00000000 \
+        --fade-in 0.1 \
+        --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+        --effect-vignette 0.5:0.5 \' \
+	timeout 600 'swaymsg "output * dpms off"' \
+		resume 'swaymsg "output * dpms on"' \
+		before-sleep 'swaylock --screenshots --clock --indicator-idle-visible \
+        --indicator-radius 100 \
+        --indicator-thickness 7 \
+        --ignore-empty-password \
+        --ring-color 2a2e38 \
+        --key-hl-color 51afef \
+        --text-color bbc2cf \
+        --line-color 2a2e38 \
+        --inside-color 242730 \
+        --separator-color 00000000 \
+        --fade-in 0.1 \
+        --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+        --effect-vignette 0.5:0.5 \'
+
+bindswitch --reload --locked lid:off exec swaymsg "output * dpms on" && swaylock --screenshots --clock --indicator-idle-visible \
+        --indicator-radius 100 \
+        --indicator-thickness 7 \
+        --ignore-empty-password \
+        --ring-color 2a2e38 \
+        --key-hl-color 51afef \
+        --text-color bbc2cf \
+        --line-color 2a2e38 \
+        --inside-color 242730 \
+        --separator-color 00000000 \
+        --fade-in 0.1 \
+        --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+        --effect-vignette 0.5:0.5 \
+
+bindswitch --reload --locked lid:on exec swaymsg "output * dpms off"
+
+# Touchpad (tap to enable configured)
+input 2321:21128:SYNA3602:00_0911:5288_Touchpad tap enabled
+   
+### Key bindings
+    # Start a terminal
+    bindsym $mod+Return exec $term
+
+    # Kill focused window
+    bindsym $mod+Shift+q kill
+
+    # Start your launcher
+    bindsym $mod+d exec wofi --show drun -I
+    # Drag floating windows by holding down $mod and left mouse button.
+    # Resize them with right mouse button + $mod.
+    # Despite the name, also works for non-floating windows.
+    # Change normal to inverse to use left mouse button for resizing and right
+    # mouse button for dragging.
+    floating_modifier $mod normal
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+# Brightness controls
+ bindsym XF86MonBrightnessUp exec brightnessctl -q set +5% # increase screen brightness
+ bindsym XF86MonBrightnessDown exec brightnessctl -q set 5%- # decrease screen brightnes
+
+# Pulse Audio controls
+ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Power Off
+ bindsym XF86PowerOff exec swaynag -t warning -m '襤 Power Menu Options' -b ' 﫼 Logout ' 'swaymsg exit' -z '  Suspend ' 'loginctl suspend' -b '  Restart ' 'loginctl reboot' -b ' 襤 Shutdown '  'loginctl poweroff'
+
+# Moving around:
 #
-# To get a config file with the same key positions, but for your current
-# layout, use the i3-config-wizard
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
 
-# $modkey for ALT and Mod4 for Winkey
-set $modkey Mod4
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+#
+    # Switch to workspace
+    bindsym $mod+1 workspace number 1
+    bindsym $mod+2 workspace number 2
+    bindsym $mod+3 workspace number 3
+    bindsym $mod+4 workspace number 4
+    bindsym $mod+5 workspace number 5
+    bindsym $mod+6 workspace number 6
+    bindsym $mod+7 workspace number 7
+    bindsym $mod+8 workspace number 8
+    bindsym $mod+9 workspace number 9
+    bindsym $mod+0 workspace number 10
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
+    bindsym $mod+Shift+7 move container to workspace number 7
+    bindsym $mod+Shift+8 move container to workspace number 8
+    bindsym $mod+Shift+9 move container to workspace number 9
+    bindsym $mod+Shift+0 move container to workspace number 10
+    # Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+    workspace_auto_back_and_forth yes
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-font pango: Terminus (TTF) bold 10
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
 
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
 
-# Before i3 v4.8, we used to recommend this one as the default:
-# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-# The font above is very space-efficient, that is, it looks good, sharp and
-# clear in small sizes. However, its unicode glyph coverage is limited, the old
-# X core fonts rendering does not support right-to-left and this being a bitmap
-# font, it doesn't scale on retina/hidpi displays.
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
 
-# use these keys for focus, movement, and resize directions when reaching for
-# the arrows is not convenient
-set $up l
-set $down k
-set $left j
-set $right semicolon
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
 
-# use Mouse+$modkey to drag floating windows to their wanted position
-floating_modifier $modkey
+    # Move focus to the parent container
+    bindsym $mod+a focus parent
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
 
-# start a terminal
-bindsym $modkey+Return exec --no-startup-id alacritty
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
 
-# kill focused window
-bindsym $modkey+Shift+q kill
-
-# start dmenu (a program launcher)
-bindsym $modkey+d exec --no-startup-id wofi --show drun -I
-# bindsym $modkey+d exec --no-startup-id dmenu_run
-
-# screenshot
-bindsym Control+Print exec grim - | wl-copy
-bindsym Control+Shift+Print exec grim -g "$(slurp -d)" - | wl-copy
-
-
-#brilho e som
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-bindsym XF86MonBrightnessUp exec brightnessctl set +5%
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $modkey+d exec --no-startup-id --no-startup-id i3-dmenu-desktop
-
-# change focus
-bindsym $modkey+$left focus left
-bindsym $modkey+$down focus down
-bindsym $modkey+$up focus up
-bindsym $modkey+$right focus right
-
-# alternatively, you can use the cursor keys:
-bindsym $modkey+Left focus left
-bindsym $modkey+Down focus down
-bindsym $modkey+Up focus up
-bindsym $modkey+Right focus right
-
-# move focused window
-bindsym $modkey+Shift+$left move left
-bindsym $modkey+Shift+$down move down
-bindsym $modkey+Shift+$up move up
-bindsym $modkey+Shift+$right move right
-
-# alternatively, you can use the cursor keys:
-bindsym $modkey+Shift+Left move left
-bindsym $modkey+Shift+Down move down
-bindsym $modkey+Shift+Up move up
-bindsym $modkey+Shift+Right move right
-
-# split in horizontal orientation
-bindsym $modkey+h split h
-
-# split in vertical orientation
-bindsym $modkey+v split v
-
-# enter fullscreen mode for the focused container
-bindsym $modkey+f fullscreen toggle
-
-# change container layout (stacked, tabbed, toggle split)
-bindsym $modkey+s layout stacking
-bindsym $modkey+w layout tabbed
-bindsym $modkey+e layout toggle split
-
-# toggle tiling / floating
-bindsym $modkey+Shift+space floating toggle
-
-# change focus between tiling / floating windows
-bindsym $modkey+space focus mode_toggle
-
-# focus the parent container
-bindsym $modkey+a focus parent
-
-# focus the child container
-#bindsym $modkey+d focus child
-
-# move the currently focused window to the scratchpad
-bindsym $modkey+Shift+minus move scratchpad
-
-# Show the next scratchpad window or hide the focused scratchpad window.
-# If there are multiple scratchpad windows, this command cycles through them.
-bindsym $modkey+minus scratchpad show
-
-# Enable the setion below to fetch all the colors from Xresources
-#set_from_resource $xforeground foreground
-#set_from_resource $xbackground background
-#set_from_resource $xcursor cursorColor
-#set_from_resource $xcolor0 color0
-#set_from_resource $xcolor8 color8
-#set_from_resource $xcolor1 color1
-#set_from_resource $xcolor9 color9
-#set_from_resource $xcolor2 color2
-#set_from_resource $xcolor10 color10
-#set_from_resource $xcolor3 color3
-#set_from_resource $xcolor11 color11
-#set_from_resource $xcolor4 color4
-#set_from_resource $xcolor12 color12
-#set_from_resource $xcolor5 color5
-#set_from_resource $xcolor13 color13
-#set_from_resource $xcolor6 color6
-#set_from_resource $xcolor14 color14
-#set_from_resource $xcolor7 color7
-#set_from_resource $xcolor15 color15
-
-# Manual color settings.
-# red theme
-#set $xforeground #c5c8c6
-#set $xbackground #1d1f21
-#set $xcursor #c5c8c6
-#set $xcolor0 #282a2e
-#set $xcolor8 #373b41
-#set $xcolor1 #a54242
-#set $xcolor9 #cc6666
-#set $xcolor2 #8c9440
-#set $xcolor10 #b5bd68
-#set $xcolor3 #de935f
-#set $xcolor11 #f0c674
-#set $xcolor4 #5f819d
-#set $xcolor12 #81a2be
-#set $xcolor5 #85678f
-#set $xcolor13 #b294bb
-#set $xcolor6 #5e8d87
-#set $xcolor14 #8abeb7
-#set $xcolor7 #707880
-#set $xcolor15 #c5c8c6
-# blue theme
-set $xforeground #c5c8c6
-set $xbackground #1d1f21
-set $xcursor #c5c8c6
-set $xcolor0 #0d3264
-set $xcolor8 #373b41
-set $xcolor1 #467ecb
-set $xcolor9 #cc6666
-set $xcolor2 #8c9440
-set $xcolor10 #b5bd68
-set $xcolor3 #de935f
-set $xcolor11 #f0c674
-set $xcolor4 #5f819d
-set $xcolor12 #81a2be
-set $xcolor5 #85678f
-set $xcolor13 #b294bb
-set $xcolor6 #6298e0
-set $xcolor14 #8abeb7
-set $xcolor7 #707880
-set $xcolor15 #c5c8c6
-
-# Colors
-# Class                 border          backgr      text            indic
-client.focused          $xcolor6       $xcolor1     $xbackground   $xcolor7
-client.focused_inactive $xcolor6       $xcolor0     $xcolor14
-client.unfocused        $xcolor6       $xcolor0     $xcolor14
-client.urgent           $xbackground   $xcolor9     $xbackground
-client.placeholder      $xcolor7       $xcolor7     $xcolor14
-
-# Define names for default workspaces for which we configure key bindings later on.
-# We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:I"
-set $ws2 "2:II"
-set $ws3 "3:III"
-set $ws4 "4:IV"
-set $ws5 "5:V"
-set $ws6 "6:VI"
-set $ws7 "7:VII"
-set $ws8 "8:VIII"
-set $ws9 "9:IX"
-set $ws10 "10:X"
-
-# switch to workspace
-bindsym $modkey+1 workspace $ws1
-bindsym $modkey+2 workspace $ws2
-bindsym $modkey+3 workspace $ws3
-bindsym $modkey+4 workspace $ws4
-bindsym $modkey+5 workspace $ws5
-bindsym $modkey+6 workspace $ws6
-bindsym $modkey+7 workspace $ws7
-bindsym $modkey+8 workspace $ws8
-bindsym $modkey+9 workspace $ws9
-bindsym $modkey+0 workspace $ws10
-
-# move focused container to workspace
-bindsym $modkey+Shift+1 move container to workspace $ws1
-bindsym $modkey+Shift+2 move container to workspace $ws2
-bindsym $modkey+Shift+3 move container to workspace $ws3
-bindsym $modkey+Shift+4 move container to workspace $ws4
-bindsym $modkey+Shift+5 move container to workspace $ws5
-bindsym $modkey+Shift+6 move container to workspace $ws6
-bindsym $modkey+Shift+7 move container to workspace $ws7
-bindsym $modkey+Shift+8 move container to workspace $ws8
-bindsym $modkey+Shift+9 move container to workspace $ws9
-bindsym $modkey+Shift+0 move container to workspace $ws10
-
-# reload the configuration file
-bindsym $modkey+Shift+c reload
-
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $modkey+Shift+r restart
-
-# exit i3 (logs you out of your X session) | Changes was made here.
-#bindsym $modkey+Shift+e exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-
-# resize window (you can also use the mouse for that)
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
 mode "resize" {
-    # These bindings trigger as soon as you enter the resize mode
+   # These bindings trigger as soon as you enter the resize mode
 
     # Pressing left will shrink the window’s width.
     # Pressing right will grow the window’s width.
@@ -272,93 +244,65 @@ mode "resize" {
     bindsym Up          resize shrink height 12 px or 12 ppt
     bindsym Right       resize grow width 12 px or 12 ppt
 
-    bindsym $modkey+$left       resize shrink width 01 px or 01 ppt
-    bindsym $modkey+$down       resize grow height 01 px or 01 ppt
-    bindsym $modkey+$up         resize shrink height 01 px or 01 ppt
-    bindsym $modkey+$right      resize grow width 01 px or 01 ppt
+    bindsym $mod+$left       resize shrink width 01 px or 01 ppt
+    bindsym $mod+$down       resize grow height 01 px or 01 ppt
+    bindsym $mod+$up         resize shrink height 01 px or 01 ppt
+    bindsym $mod+$right      resize grow width 01 px or 01 ppt
 
-    bindsym $modkey+Left        resize shrink width 01 px or 01 ppt
-    bindsym $modkey+Down        resize grow height 01 px or 01 ppt
-    bindsym $modkey+Up          resize shrink height 01 px or 01 ppt
-    bindsym $modkey+Right       resize grow width 01 px or 01 ppt
+    bindsym $mod+Left        resize shrink width 01 px or 01 ppt
+    bindsym $mod+Down        resize grow height 01 px or 01 ppt
+    bindsym $mod+Up          resize shrink height 01 px or 01 ppt
+    bindsym $mod+Right       resize grow width 01 px or 01 ppt
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
+bindsym $mod+r mode "resize"
 
-bindsym $modkey+r mode "resize"
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+bar {
+    #position top
+swaybar_command waybar
+ #   status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
 
+}
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
- #   status_command waybar
-#    mode dock
-#    position top
-#    strip_workspace_numbers yes
-#    font pango: Terminus (TTF) medium 10
-#    separator_symbol ")("
+#No titlebars
+client.focused #6298e0 #467ecb #1d1f21 #707880
+client.focused_inactive #6298e0 #0d3264 #8abeb7
+client.unfocused #6298e0 #0d3264 #8abeb7
+client.urgent #1d1f21 #cc6666 #1d1f21
+client.placeholder #707880 #707880 #8abeb7
+default_border pixel 3
 
- #   colors {
-       #Where      #Color
-   #    background  $xbackground
-    #    statusline  $xforeground
-
-        #Where              #Border         #Background     #Text
-     #   focused_workspace   $xbackground    $xcolor1        $xbackground
-        #urgent_workspace    $xbackground    $xcolor9        $xbackground
-     #   urgent_workspace    $xbackground    $xcolor1        $xbackground
-     #   inactive_workspace  $xbackground    $xcolor0        $xforeground
-   # }
-#}
-
-
-
-bindsym XF86PowerOff exec powerask
-
-# Toggle bar
-bindsym $modkey+m bar mode toggle
-
-#swaylock
-bindsym Ctrl+Alt+l exec swaylock -i Imagens/Papeis-de-Parede-e-Icones/landscape.jpg --clock --effect-blur 7x5 --ring-color 3399ff --line-color 004de6 --separator-color 004de6 --inside-ver-color 004de6 --key-hl-color 004de6
-#swayidle
-exec swayidle -w \
-         timeout 300 'swaylock -i Imagens/Papeis-de-Parede-e-Icones/landscape.jpg --clock --effect-blur 7x5 --ring-color 3399ff --line-color 004de6 --separator-color 004de6 --inside-ver-color 004de6 --key-hl-color 004de6' \
-         timeout 600 'swaymsg "output * dpms off"' \
-              resume 'swaymsg "output * dpms on"' \
-          before-sleep 'swaylock -i Imagens/Papeis-de-Parede-e-Icones/landscape.jpg --clock --effect-blur 7x5 --ring-color 3399ff --line-color 004de6 --separator-color 004de6 --inside-ver-color 004de6 --key-hl-color 004de6'
-
-for_window [app_id="firefox"] inhibit_idle fullscreen
-
-
-bindswitch --reload --locked lid:off exec swaymsg "output * dpms on" && swaylock -i Imagens/Papeis-de-Parede-e-Icones/landscape.jpg --clock --effect-blur 7x5 --ring-color 3399ff --line-color 004de6 --separator-color 004de6 --inside-ver-color 004de6 --key-hl-color 004de6
-bindswitch --reload --locked lid:on exec swaymsg "output * dpms off"
-
-
-# Back and forth when pressing the same workspace keybind
-workspace_auto_back_and_forth yes
-
-# Display urgent notification on windows
-force_display_urgency_hint 500 ms
-
-
-
-# Misc (above)
-default_border pixel 4
-
-# Floating dialogs
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="task_dialog"] floating enable
-
-# i3-gaps configuration
+#gaps
 gaps inner 10
-gaps outer 0
+gaps outer 0 
 smart_gaps on
 
-exec --no-startup-id waybar &
-exec --no-startup-id pipewire &
-exec --no-startup-id wireplumberw &
-exec --no-startup-id pipewire-pulse &
-exec --no-startup-id exec mako &
+ # take a screenshot (selection)
 
+   bindsym Shift+Print exec grim -g "$(slurp)" ~/Imagens/$(date +%Y-%m-%d_%H-%m-%s).png
+
+ # take a screenshot (entire)
+    bindsym Print exec grim -t png ~/Imagens/$(date +%Y-%m-%d_%H-%m-%s).png
+ 
+ # take a screenshot to clipboard (selection)
+    bindsym Control+Shift+Print exec grim -g "$(slurp -d)" - | wl-copy
+
+# take a screenshot to clipboard (entire)
+    bindsym Control+Print exec grim - | wl-copy
+
+
+# use xwayland 
+xwayland enable
+
+exec --no-startup-id pipewire &
+exec --no-startup-id wireplumber &
+exec --no-startup-id pipewire-pulse &
+exec --no-startup-id mako &
+include /etc/sway/config.d/*

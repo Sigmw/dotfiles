@@ -4,7 +4,7 @@
     "height": 37, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode","temperature"],
+    "modules-left": ["sway/workspaces", "sway/mode", "cpu" ,"memory", "disk" ,"idle_inhibitor"],
 	"modules-center": ["clock"],
     "modules-right": ["pulseaudio","battery","network","tray","custom/power"],
     // Modules configuration
@@ -18,6 +18,11 @@
              "3": "III",
              "4": "IV",
              "5": "V",
+	     "6": "VI",
+	     "7": "VII",
+	     "8": "VIII",
+	     "9": "IX",
+	     "10": "X",
          }
      },
     "keyboard-state": {
