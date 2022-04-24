@@ -1,0 +1,10 @@
+#dawda
+# Font configuration
+font:
+  # Normal (roman) font face
+  normal:
+    #family: "Hack"
+    # family: "FiraCode Nerd Font"
+    #family: "FantasqueSansMono Nerd Font"
+    family: "JetBrains Mono Nerd Font"
+    #family: "IBM Plex Mono"
