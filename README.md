@@ -1,8 +1,7 @@
-# Deps:
+# my deps:
 
 ```
 wofi 
-terminus-font-ttf 
 terminus-font
 swaylock-effects-git
 pipewire
@@ -22,18 +21,18 @@ xdg-desktop-portal-wlr
 wf-recorder
 mako
 alacritty
-alacritty-themes
 grim
 slurp
 nerd-fonts
 ```
 
-Neovim:
+packer nvim:
 ```
-git clone --depth=1 https://github.com/savq/paq-nvim.git \
-    "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/pack/paqs/start/paq-nvim
+git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
 
+my emacs:
 ```
 emacs-gcc-wayland-devel-bin
 ```
